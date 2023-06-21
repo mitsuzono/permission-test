@@ -1,0 +1,39 @@
+name: textlint sample
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    paths:
+      - 'README.md'
+      - 'docs/*.md'
+
+jobs:
+  textlint:
+    name: textlint
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+  
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: npm
+          cache-dependency-path: ./package-lock.json
+
+      - name: npm install
+        run: |
+          npm install
+
+      - name: npx textlint
+        run: |
+          npx textlint ./README.md ./docs/*.md >> ./.textlint.log
+
+      - if: ${{ failure() }}
+        run: gh pr comment --body-file ./.textlint.log "${URL}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          URL: ${{ github.event.pull_request.html_url }}

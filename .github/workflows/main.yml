@@ -1,0 +1,28 @@
+name: textlint sample
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  textlint:
+    name: textlint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: npm
+          cache-dependency-path: ./package-lock.json
+
+      - name: npm install
+        run: |
+          npm install
+
+      - name: npx textlint
+        run: |
+          npx textlint ./README.md ./docs/*.md

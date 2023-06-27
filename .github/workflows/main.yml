@@ -1,8 +1,14 @@
 name: textlint sample
-run-name: 'Strapi ID.${{ inputs.info_id }} : ${{ inputs.info_title }}'
+run-name: ${{ inputs.workflow_dispatch_name }}
 
 on:
   workflow_dispatch:
+    inputs:
+      workflow_dispatch_name:
+        description: 'workflow dispatch name'
+        default: ''
+        required: false
+        type: string
   push:
     branches:
       - main

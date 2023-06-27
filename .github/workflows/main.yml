@@ -1,4 +1,5 @@
 name: textlint sample
+run-name: 'Strapi ID.${{ inputs.info_id }} : ${{ inputs.info_title }}'
 
 on:
   workflow_dispatch:
